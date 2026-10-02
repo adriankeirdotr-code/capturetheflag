@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rail Support Division — Staff Sign In</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#1d2a31;--panel:#263741;--ink:#eef1f0;--mute:#9db0b8;--line:#3a4f5a;--signal:#f2b632;--bad:#ff7a6b;--ok:#6fd39a}
+:root[data-theme="light"]{--bg:#e8edee;--panel:#fff;--ink:#17242b;--mute:#566a73;--line:#c5d1d5;--signal:#c98a00;--bad:#b3261e;--ok:#17744a}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#e8edee;--panel:#fff;--ink:#17242b;--mute:#566a73;--line:#c5d1d5;--signal:#c98a00;--bad:#b3261e;--ok:#17744a}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--bg);color:var(--ink);font-family:Barlow,system-ui,sans-serif;font-size:16px;line-height:1.5}
+main{width:100%;max-width:400px}
+.sign{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.lamp{width:18px;height:18px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 5px color-mix(in srgb,var(--signal) 25%,transparent)}
+h1{font:700 30px/1.1 "Barlow Condensed",sans-serif;letter-spacing:.02em;margin:0}
+.sub{color:var(--mute);margin:0}
+.card{background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--signal);border-radius:4px;padding:24px}
+label{display:block;font-weight:500;margin-bottom:6px}
+input{width:100%;padding:11px 12px;margin-bottom:16px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:3px;font:inherit}
+input:focus-visible,button:focus-visible{outline:3px solid var(--signal);outline-offset:2px}
+button{width:100%;padding:12px;border:0;border-radius:3px;background:var(--signal);color:#1a1a1a;font:700 18px "Barlow Condensed",sans-serif;letter-spacing:.04em;cursor:pointer}
+#msg{min-height:24px;margin:14px 0 0;color:var(--bad)}
+.flag{display:none}
+.flag.show{display:block}
+.flag h2{font:700 24px "Barlow Condensed",sans-serif;margin:0 0 4px;color:var(--ok)}
+pre{margin:14px 0 0;padding:14px;background:var(--bg);border:1px dashed var(--ok);border-radius:3px;color:var(--ok);font:500 17px ui-monospace,Menlo,monospace;overflow-x:auto}
+.path{margin-top:14px;color:var(--mute);font-size:14px;text-align:center}
+</style>
+</head>
+<body>
+<main>
+  <div class="sign"><span class="lamp"></span><div><h1>Rail Support Division</h1><p class="sub">Staff sign in</p></div></div>
+
+  <section class="card" id="login">
+    <form id="f" autocomplete="off" onsubmit="return false">
+      <label for="u">Username</label>
+      <input id="u" name="u" type="text" autocapitalize="off" spellcheck="false">
+      <label for="p">Password</label>
+      <input id="p" name="p" type="password">
+      <button id="go" type="button">Sign in</button>
+      <p id="msg" role="alert"></p>
+    </form>
+  </section>
+
+  <section class="card flag" id="flagBox">
+    <h2>File opened</h2>
+    <p class="sub">The page you were never meant to find.</p>
+    <pre id="out"></pre>
+  </section>
+
+  <p class="path">rail/supportdivision</p>
+</main>
+<script>
+(function(){
+  // Flag is assembled at runtime so it is not sitting in plain text in the markup.
+  var parts=["CTF{","hidd3n","_p4g3","}"];
+  var u=document.getElementById("u"),p=document.getElementById("p"),
+      msg=document.getElementById("msg"),go=document.getElementById("go");
+  function check(){
+    var a=u.value.trim().toLowerCase(),b=p.value.trim().toLowerCase();
+    if(a==="flag.txt"||b==="flag.txt"){
+      document.getElementById("login").style.display="none";
+      document.getElementById("out").textContent=parts.join("");
+      document.getElementById("flagBox").classList.add("show");
+    }else{
+      msg.textContent="Incorrect username or password.";
+      p.value="";
+    }
+  }
+  go.addEventListener("click",check);
+  document.getElementById("f").addEventListener("keydown",function(e){if(e.key==="Enter")check();});
+})();
+</script>
+</body>
+</html>
